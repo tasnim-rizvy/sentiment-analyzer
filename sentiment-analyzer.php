@@ -45,4 +45,4 @@ function sa_plugin_activate() {
     ));
 }
 
-register_activation_hook(__FILE__, 'sa_plugin_activate' );
+register_activation_hook(__FILE__, 'sa_plugin_activate');
