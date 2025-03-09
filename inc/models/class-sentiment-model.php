@@ -1,19 +1,19 @@
 <?php 
 
-namespace SentimentAnalyzer\Models;
+namespace Sentiment_Analyzer\Models;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-class Sentiment {
+class Sentiment_Model {
     public static function get_keywords() {
         return get_option('sentiment_keywords');
     }
 
-    public static function sentiment_analysis() {
+    public static function sentiment_analysis($post_content) {
         $keywords = self::get_keywords();
-        $content = strtolower(strip_tags(get_the_content()));
+        $content = strtolower(strip_tags($post_content));
 
         $sentiment_counts = array(
             'positive' => 0,
