@@ -10,10 +10,10 @@ if (! defined('ABSPATH')) {
 
 class Sentiment_Controller {
     public function __construct() {
-        add_action('save_post', array($this, 'analyze_post_sentiment'));
+        add_action('save_post', array($this, 'get_post_sentiment'));
     }
 
-    public function analyze_post_sentiment($post_id) {
+    public function get_post_sentiment($post_id) {
         if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
             return;
         }
@@ -24,3 +24,5 @@ class Sentiment_Controller {
         update_post_meta($post_id, 'post-sentiment', $sentiment);
     }
 }
+
+new Sentiment_Controller();

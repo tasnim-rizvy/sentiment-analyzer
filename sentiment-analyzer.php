@@ -30,6 +30,9 @@ if (! defined('ABSPATH')) {
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_URL', plugin_dir_url(__FILE__));
 
+require_once PLUGIN_PATH . 'inc/controllers/class-sentiment-controller.php';
+require_once PLUGIN_PATH . 'inc/controllers/class-sentiment-admin-controller.php';
+
 /**
  * Action upon activation of the plugin.
  *
@@ -41,7 +44,6 @@ function sa_plugin_activate() {
     add_option( 'sentiment_keywords', array(
         'positive' => array('good', 'great', 'awesome', 'fantastic'),
         'negative' => array('bad', 'terrible', 'awful', 'worst'),
-        'neutral' => array('okay', 'fine', 'average', 'alright'),
     ));
 }
 
