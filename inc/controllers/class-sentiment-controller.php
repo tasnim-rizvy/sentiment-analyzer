@@ -13,12 +13,13 @@ class Sentiment_Controller {
         add_action('save_post', array($this, 'get_post_sentiment'));
     }
 
-    public function get_post_sentiment($post_id) {
+    public function get_post_sentiment($post_id): void {
+
         if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
             return;
         }
 
-        $content = get_the_content($post_id);
+        $content = get_post_field('post_content', $post_id);
         $sentiment = Sentiment_Model::sentiment_analysis($content);
 
         update_post_meta($post_id, 'post-sentiment', $sentiment);

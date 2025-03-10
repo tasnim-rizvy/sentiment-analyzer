@@ -27,24 +27,77 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('PLUGIN_URL', plugin_dir_url(__FILE__));
+final class Sentiment_Analyzer {
+	/**
+	 * Plugin version
+	 *
+	 * @return string
+	 */
+	public const VERSION = '1.0.0';
 
-require_once PLUGIN_PATH . 'inc/controllers/class-sentiment-controller.php';
-require_once PLUGIN_PATH . 'inc/controllers/class-sentiment-admin-controller.php';
+	/**
+	 * Class constructor
+	 */
+	private function __construct() {
+		$this->sa_constants();
+		$this->sa_load_files();
+		register_activation_hook(__FILE__, [$this, 'sa_activate']);
+	}
 
-/**
- * Action upon activation of the plugin.
- *
- * When the plugin is activated, this function adds the default sentiment keywords under 'sentiment_keywords' option.
- *
- * @return void
- */
-function sa_plugin_activate() {
-    add_option( 'sentiment_keywords', array(
-        'positive' => array('good', 'great', 'awesome', 'fantastic'),
-        'negative' => array('bad', 'terrible', 'awful', 'worst'),
-    ));
+	/**
+	 * Initializes a singleton instance
+	 *
+	 * @return self
+	 */
+	public static function init(): self {
+		static $instance = false;
+
+		if (! $instance) {
+			$instance = new self();
+		}
+
+		return $instance;
+	}
+
+	/**
+	 * Define the required constants
+	 *
+	 * @return void
+	 */
+	private function sa_constants(): void {
+		define('PLUGIN_PATH', plugin_dir_path(__FILE__));
+		define('PLUGIN_URL', plugin_dir_url(__FILE__));
+	}
+
+	/**
+	 * Load required plugin files
+	 *
+	 * @return void
+	 */
+	private function sa_load_files(): void {
+		include PLUGIN_PATH . 'inc/models/class-sentiment-model.php';
+		include PLUGIN_PATH . 'inc/controllers/class-sentiment-controller.php';
+		include PLUGIN_PATH . 'inc/controllers/class-sentiment-admin-controller.php';
+	}
+
+	/**
+	 * Action upon activation of the plugin.
+	 *
+	 * When the plugin is activated, this function adds the default sentiment keywords under 'sentiment_keywords' option.
+	 *
+	 * @return void
+	 */
+	public function sa_activate(): void {
+		add_option( 'sentiment_keywords', array(
+			'positive' => array('good', 'great', 'awesome', 'fantastic'),
+			'negative' => array('bad', 'terrible', 'awful', 'worst'),
+		));
+	}
 }
 
-register_activation_hook(__FILE__, 'sa_plugin_activate');
+/**
+ * Initializes the main plugin
+ *
+ * @return Sentiment_Analyzer
+ */
+Sentiment_Analyzer::init();

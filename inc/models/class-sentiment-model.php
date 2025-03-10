@@ -12,14 +12,14 @@ if (! defined('ABSPATH')) {
  * This class is responsible for handling sentiment analysis operations.
  * It provides methods to analyze text and determine the sentiment.
  *
- * @package Sentiment_Analyzer
+ * @package sentiment-analyzer
  */
 class Sentiment_Model {
     public static function get_keywords() {
         return get_option('sentiment_keywords');
     }
 
-    public static function sentiment_analysis($post_content) {
+    public static function sentiment_analysis($post_content): string {
         $keywords = self::get_keywords();
         $content = strtolower(strip_tags($post_content));
 
@@ -32,11 +32,7 @@ class Sentiment_Model {
             foreach ($words as $word) {
                 $sentiment_counts[$sentiment] += substr_count($content, $word);
             }
-        }
-
-        if ($sentiment_counts['positive'] == $sentiment_counts['negative'] == 0) {
-            return 'neutral';
-        }
+        };
 
         if ($sentiment_counts['positive'] > $sentiment_counts['negative']) {
             return 'positive';

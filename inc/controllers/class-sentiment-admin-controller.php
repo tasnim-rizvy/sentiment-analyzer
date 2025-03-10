@@ -11,7 +11,7 @@ class Sentiment_Admin_Controller {
         add_action('admin_menu', array($this, 'sentiment_admin_menu'));
     }
 
-    public function sentiment_admin_menu() {
+    public function sentiment_admin_menu(): void {
         add_options_page(
             'Sentiment Analyzer',
             'Sentiment Analyzer',
@@ -23,8 +23,12 @@ class Sentiment_Admin_Controller {
         );
     }
 
-    public function sentiment_settings_page() {
-        if(!empty($_POST) && $_POST['positive_keywords'] && $_POST['negative_keywords']) {
+    public function sentiment_settings_page(): void {
+        if( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+			if( !isset($_POST['sentiment_nonce']) && !wp_verify_nonce( $_POST['sentiment_nonce'], 'sentiment_nonce_action' )) {
+				wp_die(__('Security check failed', 'sentiment-analyzer'));
+			}
+
             $positive_keywords = explode(',', $_POST['positive_keywords']);
             $negative_keywords = explode(',', $_POST['negative_keywords']);
 
@@ -36,6 +40,7 @@ class Sentiment_Admin_Controller {
             update_option('sentiment_keywords', $keywords);
             echo '<div class="updated"><p>Settings saved.</p></div>';
         }
+
         include_once PLUGIN_PATH . 'inc/views/sentiment-settings.php';
     }
 }

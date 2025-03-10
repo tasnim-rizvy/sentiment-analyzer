@@ -3,6 +3,8 @@
 <div class="wrap">
     <h2><?php esc_html_e('Sentiment Analyzer Settings', 'sentiment-analyzer') ?></h2>
     <form method="post">
+	    <?php  wp_nonce_field('sentiment_nonce_action', 'sentiment_nonce'); ?>
+
         <table class="form-table" role="presentation">
             <tbody>
                 <tr>
