@@ -15,12 +15,8 @@ if (! defined('ABSPATH')) {
  * @package sentiment-analyzer
  */
 class Sentiment_Model {
-    public static function get_keywords() {
-        return get_option('sentiment_keywords');
-    }
-
     public static function sentiment_analysis($post_content): string {
-        $keywords = self::get_keywords();
+        $keywords = get_option('sentiment_keywords');
         $content = strtolower(strip_tags($post_content));
 
         $sentiment_counts = array(

@@ -78,6 +78,7 @@ final class Sentiment_Analyzer {
 		include PLUGIN_PATH . 'inc/models/class-sentiment-model.php';
 		include PLUGIN_PATH . 'inc/controllers/class-sentiment-controller.php';
 		include PLUGIN_PATH . 'inc/controllers/class-sentiment-admin-controller.php';
+		include PLUGIN_PATH . 'inc/controllers/class-sentiment-shortcode-controller.php';
 	}
 
 	/**

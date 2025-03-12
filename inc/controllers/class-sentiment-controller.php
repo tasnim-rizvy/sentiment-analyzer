@@ -11,6 +11,7 @@ if (! defined('ABSPATH')) {
 class Sentiment_Controller {
     public function __construct() {
         add_action('save_post', array($this, 'get_post_sentiment'));
+        add_filter('post_class', array($this, 'add_sentiment_class'));
     }
 
     public function get_post_sentiment($post_id): void {
@@ -23,6 +24,16 @@ class Sentiment_Controller {
         $sentiment = Sentiment_Model::sentiment_analysis($content);
 
         update_post_meta($post_id, 'post-sentiment', $sentiment);
+    }
+
+    public function add_sentiment_class($classes): array {
+        $sentiment = get_post_meta(get_the_ID(), 'post-sentiment', true);
+
+        if ($sentiment) {
+            $classes[] = 'post-sentiment-' . $sentiment;
+        }
+
+        return $classes;
     }
 }
 
