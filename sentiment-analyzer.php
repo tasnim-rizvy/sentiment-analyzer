@@ -39,9 +39,11 @@ final class Sentiment_Analyzer {
 	 * Class constructor
 	 */
 	private function __construct() {
-		$this->sa_constants();
-		$this->sa_load_files();
-		register_activation_hook(__FILE__, [$this, 'sa_activate']);
+		self::sa_constants();
+		self::sa_load_files();
+
+		add_action( 'wp_enqueue_scripts', array($this, 'sa_enqueue_assets'));
+		register_activation_hook(__FILE__, array($this, 'sa_activate'));
 	}
 
 	/**
@@ -79,6 +81,15 @@ final class Sentiment_Analyzer {
 		include PLUGIN_PATH . 'inc/controllers/class-sentiment-controller.php';
 		include PLUGIN_PATH . 'inc/controllers/class-sentiment-admin-controller.php';
 		include PLUGIN_PATH . 'inc/controllers/class-sentiment-shortcode-controller.php';
+	}
+
+	/**
+	 * Enqueue plugin assets
+	 *
+	 * @return void
+	 */
+	public function sa_enqueue_assets(): void {
+		wp_enqueue_style( 'sentiment-analyzer', PLUGIN_URL . 'assets/css/sentiment-analyzer.css', array(), self::VERSION );
 	}
 
 	/**
