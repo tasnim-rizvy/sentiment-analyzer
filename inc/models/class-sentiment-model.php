@@ -36,14 +36,5 @@ class Sentiment_Model {
 		} else {
 			return array_keys( $sentiment_counts, max( $sentiment_counts ) )[0];
 		}
-
-
-//		if ( $sentiment_counts['positive'] > $sentiment_counts['negative'] ) {
-//			return 'positive';
-//		} elseif ( $sentiment_counts['negative'] > $sentiment_counts['positive'] ) {
-//			return 'negative';
-//		} else {
-//			return 'neutral';
-//		}
 	}
 }
