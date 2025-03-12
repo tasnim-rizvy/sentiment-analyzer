@@ -14,7 +14,7 @@ class Sentiment_Shortcode_Controller {
 	public function sentiment_filter_posts( $atts ): bool|string {
 		$attributes = shortcode_atts( [ 'sentiment' => 'neutral' ], $atts, 'sentiment_filter' );
 		$sentiment  = explode( "|", $attributes['sentiment'] );
-		$paged      = max( 1, get_query_var( 'paged', 1 ) );;
+		$paged      = max( 1, get_query_var( 'paged', 1 ) );
 
 		$query = new \WP_Query( [
 			'post_type'           => 'post',
@@ -30,6 +30,7 @@ class Sentiment_Shortcode_Controller {
 			),
 		] );
 
+		ob_start();
 		if ( $query->have_posts() ) {
 			echo '<h4>' . __( 'Posts with sentiment', 'sentiment-analyzer' ) . ': ' . implode( ', ', $sentiment ) . '</h4>';
 			$output = '<ul>';
@@ -38,8 +39,6 @@ class Sentiment_Shortcode_Controller {
 				$output .= '<li><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
 			}
 			$output .= '</ul>';
-
-			wp_reset_postdata();
 
 			if ( $query->max_num_pages > 1 ) {
 				$output .= paginate_links(
@@ -51,11 +50,14 @@ class Sentiment_Shortcode_Controller {
 					)
 				);
 			}
+			echo $output;
 		} else {
 			$output = '<p>' . __( 'No posts found with sentiment', 'sentiment-analyzer' ) . ': ' . implode( ', ', $sentiment ) . '</p>';
+			echo $output;
 		}
 
-		return wp_kses_post( $output );
+		wp_reset_postdata();
+		return ob_get_clean();
 	}
 }
 
