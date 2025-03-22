@@ -20,11 +20,10 @@
  * Text Domain:       sentiment-analyzer
  * License:           GPL v2 or later
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Update URI:        https://example.com/my-plugin/
  */
 
-if (! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 final class Sentiment_Analyzer {
@@ -42,8 +41,8 @@ final class Sentiment_Analyzer {
 		self::sa_constants();
 		self::sa_load_files();
 
-		add_action( 'wp_enqueue_scripts', array($this, 'sa_enqueue_assets'));
-		register_activation_hook(__FILE__, array($this, 'sa_activate'));
+		add_action( 'wp_enqueue_scripts', array( $this, 'sa_enqueue_assets' ) );
+		register_activation_hook( __FILE__, array( $this, 'sa_activate' ) );
 	}
 
 	/**
@@ -54,7 +53,7 @@ final class Sentiment_Analyzer {
 	public static function init(): self {
 		static $instance = false;
 
-		if (! $instance) {
+		if ( ! $instance ) {
 			$instance = new self();
 		}
 
@@ -67,8 +66,8 @@ final class Sentiment_Analyzer {
 	 * @return void
 	 */
 	private function sa_constants(): void {
-		define('PLUGIN_PATH', plugin_dir_path(__FILE__));
-		define('PLUGIN_URL', plugin_dir_url(__FILE__));
+		define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+		define( 'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 	}
 
 	/**
@@ -89,7 +88,7 @@ final class Sentiment_Analyzer {
 	 * @return void
 	 */
 	public function sa_enqueue_assets(): void {
-		wp_enqueue_style( 'sentiment-analyzer', PLUGIN_URL . 'assets/css/sentiment-analyzer.css', array(), self::VERSION );
+		wp_enqueue_style( 'sentiment-analyzer', PLUGIN_URL . 'assets/css/sentiment-analyzer.css', array(), filemtime( PLUGIN_PATH . 'assets/css/sentiment-analyzer.css' ) );
 	}
 
 	/**
@@ -101,9 +100,10 @@ final class Sentiment_Analyzer {
 	 */
 	public function sa_activate(): void {
 		add_option( 'sentiment_keywords', array(
-			'positive' => array('good', 'great', 'awesome', 'fantastic'),
-			'negative' => array('bad', 'terrible', 'awful', 'worst'),
-		));
+			'positive' => array( 'good', 'great', 'awesome', 'fantastic' ),
+			'negative' => array( 'bad', 'terrible', 'awful', 'worst' ),
+			'neutral'  => array( 'okay', 'fine', 'average', 'normal' ),
+		) );
 	}
 }
 
